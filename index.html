@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>马岁呈祥 - 高清逼真烟花</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            overflow: hidden;
+            font-family: '微软雅黑', Arial;
+            background: #000; /* 纯黑背景，突出清晰元素 */
+        }
+        #fireworksCanvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: 1;
+            mix-blend-mode: screen; /* 光效融合，更真实 */
+        }
+        .content {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        /* 文字清晰化：减少光晕层数+小半径，保留喜庆感 */
+        .main-title {
+            color: #FFD700; /* 明亮金黄，本身足够醒目 */
+            font-size: clamp(4rem, 15vw, 10rem);
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            text-shadow: 0 0 2px #FF0000, 0 0 4px #FFD700; /* 极淡光晕，不影响清晰 */
+            animation: pulse 2s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); } /* 轻微缩放，不模糊 */
+            100% { transform: scale(1); }
+        }
+        .subtitle {
+            color: #FFF;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            margin-top: 1rem;
+            text-shadow: 0 0 3px #FF0000;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="fireworksCanvas"></canvas>
+    <div class="content">
+        <h1 class="main-title">马岁呈祥</h1>
+        <p class="subtitle">小满prince祝你新年快乐，万事顺意，阖家幸福！</p>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('fireworksCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // 颜色库（红橙黄绿蓝靛紫，高饱和）
+        const COLORS = [
+            'hsla(0, 100%, 50%, 1)',   // 红
+            'hsla(30, 100%, 50%, 1)',  // 橙
+            'hsla(60, 100%, 50%, 1)',  // 黄
+            'hsla(120, 100%, 50%, 1)', // 绿
+            'hsla(240, 100%, 50%, 1)', // 蓝
+            'hsla(270, 100%, 50%, 1)', // 靛
+            'hsla(300, 100%, 50%, 1)'  // 紫
+        ];
+
+        // 烟花类（含升空轨迹拖尾）
+        class Firework {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height;
+                this.targetY = Math.random() * canvas.height * 0.4 + 50; // 爆炸高度
+                this.speed = 12 + Math.random() * 3; // 快节奏：升空速度加快
+                this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+                this.trail = []; // 升空轨迹拖尾
+                this.trailMax = 8; // 拖尾长度
+                this.alive = true;
+            }
+
+            update() {
+                // 升空移动（快节奏）
+                this.y -= this.speed;
+                // 记录轨迹点
+                this.trail.push({x: this.x, y: this.y, alpha: 1});
+                if (this.trail.length > this.trailMax) this.trail.shift();
+                
+                // 到达高度后爆炸
+                if (this.y <= this.targetY) {
+                    this.alive = false;
+                    createParticles(this.x, this.y, this.color);
+                }
+            }
+
+            draw() {
+                // 绘制升空拖尾（半透明渐隐）
+                this.trail.forEach((p, i) => {
+                    const alpha = p.alpha * (i / this.trail.length);
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color.replace('1)', `${alpha})`);
+                    ctx.fill();
+                });
+                // 绘制当前烟花点
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+
+        // 粒子类（含拖影+物理模拟）
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                // 快节奏：爆炸速度加快
+                this.speed = 6 + Math.random() * 2;
+                this.angle = Math.random() * Math.PI * 2;
+                this.vx = Math.cos(this.angle) * this.speed;
+                this.vy = Math.sin(this.angle) * this.speed;
+                this.gravity = 0.12; // 重力感
+                this.resistance = 0.96; // 空气阻力
+                this.alpha = 1;
+                this.decay = 0.01 + Math.random() * 0.005; // 快衰减，节奏紧凑
+                this.trail = []; // 粒子拖影
+                this.trailMax = 3;
+            }
+
+            update() {
+                // 物理运动（快节奏）
+                this.vy += this.gravity;
+                this.vx *= this.resistance;
+                this.vy *= this.resistance;
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                // 记录拖影
+                this.trail.push({x: this.x, y: this.y, alpha: this.alpha});
+                if (this.trail.length > this.trailMax) this.trail.shift();
+                
+                // 衰减
+                this.alpha -= this.decay;
+                return this.alpha > 0;
+            }
+
+            draw() {
+                // 绘制粒子拖影（模拟运动轨迹）
+                this.trail.forEach((p, i) => {
+                    const trailAlpha = p.alpha * (i / this.trailMax);
+                    ctx.beginPath();
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(this.x, this.y);
+                    ctx.lineWidth = 1.5;
+                    ctx.strokeStyle = this.color.replace('1)', `${trailAlpha})`);
+                    ctx.stroke();
+                });
+                // 绘制粒子本体
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 1.2, 0, Math.PI * 2);
+                ctx.fillStyle = this.color.replace('1)', `${this.alpha})`);
+                ctx.fill();
+            }
+        }
+
+        let fireworks = [];
+        let particles = [];
+
+        // 生成爆炸粒子
+        function createParticles(x, y, color) {
+            const count = 200 + Math.random() * 100; // 粒子密集，更逼真
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle(x, y, color));
+            }
+        }
+
+        // 动画循环（快节奏）
+        function animate() {
+            // 清屏（半透明，保留轻微拖影）
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // 生成新烟花（频率提高，更喜庆）
+            if (Math.random() < 0.12) {
+                fireworks.push(new Firework());
+            }
+
+            // 更新/绘制烟花
+            for (let i = fireworks.length - 1; i >= 0; i--) {
+                const f = fireworks[i];
+                if (!f.alive) {
+                    fireworks.splice(i, 1);
+                } else {
+                    f.update();
+                    f.draw();
+                }
+            }
+
+            // 更新/绘制粒子
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                if (!p.update()) {
+                    particles.splice(i, 1);
+                } else {
+                    p.draw();
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        // 点击触发烟花
+        canvas.addEventListener('click', (e) => {
+            createParticles(e.clientX, e.clientY, COLORS[Math.floor(Math.random() * COLORS.length)]);
+        });
+
+        animate();
+    </script>
+</body>
+</html>
