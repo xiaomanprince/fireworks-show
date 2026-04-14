@@ -3,233 +3,670 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>马岁呈祥 - 高清逼真烟花</title>
+    <title>乒乓球巅峰对决 | 小满邀约</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        :root {
+            --primary-color: #ff3e6c;
+            --secondary-color: #36d1dc;
+            --accent-color: #5b86e5;
+            --dark-bg: #0f0f1a;
+            --darker-bg: #080811;
+            --card-bg: rgba(20, 20, 35, 0.85);
+            --text-color: #f0f0f0;
+            --text-secondary: #b0b0c0;
+            --neon-glow: 0 0 10px rgba(255, 62, 108, 0.7), 0 0 20px rgba(255, 62, 108, 0.5);
+        }
+        
         body {
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 62, 108, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(54, 209, 220, 0.1) 0%, transparent 20%);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* 顶部导航样式 */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-icon {
+            color: var(--primary-color);
+            font-size: 28px;
+        }
+        
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        /* 主内容区域 */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* 邀约卡样式 */
+        .invite-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
             overflow: hidden;
-            font-family: '微软雅黑', Arial;
-            background: #000; /* 纯黑背景，突出清晰元素 */
         }
-        #fireworksCanvas {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            z-index: 1;
-            mix-blend-mode: screen; /* 光效融合，更真实 */
+        
+        .invite-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
         }
-        .content {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            z-index: 10;
+        
+        .card-title {
+            font-size: 32px;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .card-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .info-item {
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            gap: 8px;
+        }
+        
+        .info-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+            display: flex;
             align-items: center;
+            gap: 8px;
+        }
+        
+        .info-value {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .highlight {
+            color: var(--primary-color);
+        }
+        
+        /* 对手卡片样式 */
+        .opponent-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: white;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .opponent-name {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .opponent-title {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+        
+        /* 按钮样式 */
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            margin-top: 40px;
+        }
+        
+        .btn {
+            padding: 16px 30px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            flex: 1;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--neon-glow);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-color);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            flex: 1;
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        /* 乒乓球动画 */
+        .pingpong-table {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, #1a3a1a 0%, #0d1f0d 100%);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 30px;
+            border: 4px solid #8b4513;
+        }
+        
+        .table-center {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: white;
+        }
+        
+        .table-center::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 2px;
+            background: white;
+        }
+        
+        .ball {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            top: 50%;
+            left: 20%;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+            animation: bounce 2s infinite alternate;
+        }
+        
+        .paddle {
+            position: absolute;
+            width: 10px;
+            height: 60px;
+            background: var(--primary-color);
+            border-radius: 5px;
+        }
+        
+        .paddle-left {
+            left: 10%;
+            top: 40%;
+            animation: movePaddleLeft 2.5s infinite alternate;
+        }
+        
+        .paddle-right {
+            right: 10%;
+            top: 40%;
+            animation: movePaddleRight 2.5s infinite alternate;
+        }
+        
+        @keyframes bounce {
+            0% {
+                transform: translate(0, -20px);
+            }
+            100% {
+                transform: translate(200px, 20px);
+            }
+        }
+        
+        @keyframes movePaddleLeft {
+            0%, 100% {
+                top: 40%;
+            }
+            50% {
+                top: 60%;
+            }
+        }
+        
+        @keyframes movePaddleRight {
+            0%, 100% {
+                top: 60%;
+            }
+            50% {
+                top: 40%;
+            }
+        }
+        
+        /* 倒计时样式 */
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .countdown-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .countdown-number {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .countdown-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .main-content {
+                gap: 20px;
+            }
+            
+            .invite-card, .opponent-card {
+                padding: 25px;
+            }
+            
+            .card-title {
+                font-size: 28px;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+        
+        /* 分享链接样式 */
+        .share-section {
+            margin-top: 40px;
+            padding: 30px;
+            background: var(--card-bg);
+            border-radius: 20px;
             text-align: center;
         }
-        /* 文字清晰化：减少光晕层数+小半径，保留喜庆感 */
-        .main-title {
-            color: #FFD700; /* 明亮金黄，本身足够醒目 */
-            font-size: clamp(4rem, 15vw, 10rem);
-            font-weight: 900;
-            letter-spacing: 0.1em;
-            text-shadow: 0 0 2px #FF0000, 0 0 4px #FFD700; /* 极淡光晕，不影响清晰 */
-            animation: pulse 2s ease-in-out infinite;
+        
+        .share-title {
+            font-size: 24px;
+            margin-bottom: 20px;
         }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.03); } /* 轻微缩放，不模糊 */
-            100% { transform: scale(1); }
+        
+        .share-link {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
         }
-        .subtitle {
-            color: #FFF;
-            font-size: clamp(1.5rem, 4vw, 2.5rem);
-            margin-top: 1rem;
-            text-shadow: 0 0 3px #FF0000;
+        
+        .share-input {
+            flex: 1;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+        }
+        
+        .copy-btn {
+            padding: 15px 25px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background: #4a76d4;
+        }
+        
+        .share-note {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        /* 底部样式 */
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: var(--text-secondary);
+            font-size: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 40px;
         }
     </style>
 </head>
 <body>
-    <canvas id="fireworksCanvas"></canvas>
-    <div class="content">
-        <h1 class="main-title">马岁呈祥</h1>
-        <p class="subtitle">小满prince祝你新年快乐，万事顺意，阖家幸福！</p>
+    <div class="container">
+        <!-- 顶部导航 -->
+        <header>
+            <div class="logo">
+                <i class="fas fa-table-tennis-paddle-ball logo-icon"></i>
+                <span class="logo-text">PingPong Pro</span>
+            </div>
+            <div class="header-text">
+                巅峰对决邀约
+            </div>
+        </header>
+        
+        <!-- 主内容区域 -->
+        <div class="main-content">
+            <!-- 邀约卡 -->
+            <div class="invite-card">
+                <h1 class="card-title">乒乓球巅峰对决邀约</h1>
+                <p class="card-subtitle">一场技术与友谊的较量，期待你的应战！</p>
+                
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="far fa-calendar"></i>
+                            约战时间
+                        </div>
+                        <div class="info-value">2026年4月15日 周三</div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="far fa-clock"></i>
+                            对战时段
+                        </div>
+                        <div class="info-value highlight">14:00 - 15:30</div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="fas fa-map-marker-alt"></i>
+                            约战地点
+                        </div>
+                        <div class="info-value">西安文理学院西操场</div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="fas fa-trophy"></i>
+                            对战规则
+                        </div>
+                        <div class="info-value">三局两胜 | 11分制</div>
+                    </div>
+                </div>
+                
+                <!-- 乒乓球桌动画 -->
+                <div class="pingpong-table">
+                    <div class="table-center"></div>
+                    <div class="ball"></div>
+                    <div class="paddle paddle-left"></div>
+                    <div class="paddle paddle-right"></div>
+                </div>
+                
+                <!-- 倒计时 -->
+                <div class="countdown">
+                    <div class="countdown-item">
+                        <div class="countdown-number" id="days">0</div>
+                        <div class="countdown-label">天</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-number" id="hours">0</div>
+                        <div class="countdown-label">小时</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-number" id="minutes">0</div>
+                        <div class="countdown-label">分钟</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-number" id="seconds">0</div>
+                        <div class="countdown-label">秒</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 对手卡片 -->
+            <div class="opponent-card">
+                <div class="avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <h2 class="opponent-name">刘千龙</h2>
+                <p class="opponent-title">乒乓球挑战者</p>
+                
+                <div style="text-align: left; margin-top: 30px;">
+                    <h3 style="margin-bottom: 15px; color: var(--primary-color);">挑战宣言</h3>
+                    <p style="font-style: italic; line-height: 1.6; margin-bottom: 20px;">
+                        "听说张佳腾是乒乓球的六边形战士？不是哥们你啥实力呀！来球场说话！"
+                    </p>
+                    
+                    <h3 style="margin-bottom: 15px; color: var(--primary-color);">实力评估</h3>
+                    <div style="margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>攻击力</span>
+                            <span>99%</span>
+                        </div>
+                        <div style="height: 8px; background: rgba(255, 255, 255, 0.1); border-radius: 4px; overflow: hidden;">
+                            <div style="width: 85%; height: 100%; background: linear-gradient(to right, var(--primary-color), var(--secondary-color));"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>防御力</span>
+                            <span>99%</span>
+                        </div>
+                        <div style="height: 8px; background: rgba(255, 255, 255, 0.1); border-radius: 4px; overflow: hidden;">
+                            <div style="width: 70%; height: 100%; background: linear-gradient(to right, var(--primary-color), var(--secondary-color));"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>经验值</span>
+                            <span>99%</span>
+                        </div>
+                        <div style="height: 8px; background: rgba(255, 255, 255, 0.1); border-radius: 4px; overflow: hidden;">
+                            <div style="width: 90%; height: 100%; background: linear-gradient(to right, var(--primary-color), var(--secondary-color));"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 操作按钮 -->
+        <div class="action-buttons">
+            <button class="btn btn-primary" id="acceptBtn">
+                <i class="fas fa-check-circle"></i>
+                接受挑战
+            </button>
+            <button class="btn btn-secondary" id="counterBtn">
+                <i class="fas fa-exchange-alt"></i>
+                发起反挑战
+            </button>
+        </div>
+        
+        
+        <!-- 底部信息 -->
+        <footer>
+            <p>© 2026 乒乓球邀约系统 | 本邀约有效期至 2026年4月14日 17:00</p>
+        </footer>
     </div>
 
     <script>
-        const canvas = document.getElementById('fireworksCanvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+        // 倒计时功能
+        function updateCountdown() {
+            const targetDate = new Date('2026-04-15T14:00:00').getTime();
+            const now = new Date().getTime();
+            const timeLeft = targetDate - now;
+            
+            if (timeLeft < 0) {
+                document.getElementById('days').textContent = '0';
+                document.getElementById('hours').textContent = '0';
+                document.getElementById('minutes').textContent = '0';
+                document.getElementById('seconds').textContent = '0';
+                return;
+            }
+            
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            
+            document.getElementById('days').textContent = days;
+            document.getElementById('hours').textContent = hours;
+            document.getElementById('minutes').textContent = minutes;
+            document.getElementById('seconds').textContent = seconds;
+        }
+        
+        // 初始化倒计时
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+        
+        // 接受挑战按钮功能
+        document.getElementById('acceptBtn').addEventListener('click', function() {
+            this.innerHTML = '<i class="fas fa-check-circle"></i> 已接受挑战！';
+            this.style.background = 'linear-gradient(to right, #2ecc71, #27ae60)';
+            this.style.boxShadow = '0 0 15px rgba(46, 204, 113, 0.7)';
+            
+            // 显示成功消息
+            alert('挑战已接受！已向小满发送确认通知，期待明天的对决！');
         });
-
-        // 颜色库（红橙黄绿蓝靛紫，高饱和）
-        const COLORS = [
-            'hsla(0, 100%, 50%, 1)',   // 红
-            'hsla(30, 100%, 50%, 1)',  // 橙
-            'hsla(60, 100%, 50%, 1)',  // 黄
-            'hsla(120, 100%, 50%, 1)', // 绿
-            'hsla(240, 100%, 50%, 1)', // 蓝
-            'hsla(270, 100%, 50%, 1)', // 靛
-            'hsla(300, 100%, 50%, 1)'  // 紫
-        ];
-
-        // 烟花类（含升空轨迹拖尾）
-        class Firework {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = canvas.height;
-                this.targetY = Math.random() * canvas.height * 0.4 + 50; // 爆炸高度
-                this.speed = 12 + Math.random() * 3; // 快节奏：升空速度加快
-                this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
-                this.trail = []; // 升空轨迹拖尾
-                this.trailMax = 8; // 拖尾长度
-                this.alive = true;
+        
+        // 发起反挑战按钮功能
+        document.getElementById('counterBtn').addEventListener('click', function() {
+            const newTime = prompt('请输入您希望的对战时间（例如：16:00-17:30）：', '16:00-17:30');
+            if (newTime) {
+                alert(`已向小满发起反挑战，您提议的时间是：${newTime}，等待对方确认！`);
+                this.innerHTML = '<i class="fas fa-hourglass-half"></i> 等待确认中...';
+                this.style.background = 'linear-gradient(to right, #f39c12, #e67e22)';
             }
-
-            update() {
-                // 升空移动（快节奏）
-                this.y -= this.speed;
-                // 记录轨迹点
-                this.trail.push({x: this.x, y: this.y, alpha: 1});
-                if (this.trail.length > this.trailMax) this.trail.shift();
-                
-                // 到达高度后爆炸
-                if (this.y <= this.targetY) {
-                    this.alive = false;
-                    createParticles(this.x, this.y, this.color);
-                }
-            }
-
-            draw() {
-                // 绘制升空拖尾（半透明渐隐）
-                this.trail.forEach((p, i) => {
-                    const alpha = p.alpha * (i / this.trail.length);
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2);
-                    ctx.fillStyle = this.color.replace('1)', `${alpha})`);
-                    ctx.fill();
-                });
-                // 绘制当前烟花点
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
-                ctx.fillStyle = this.color;
-                ctx.fill();
-            }
-        }
-
-        // 粒子类（含拖影+物理模拟）
-        class Particle {
-            constructor(x, y, color) {
-                this.x = x;
-                this.y = y;
-                this.color = color;
-                // 快节奏：爆炸速度加快
-                this.speed = 6 + Math.random() * 2;
-                this.angle = Math.random() * Math.PI * 2;
-                this.vx = Math.cos(this.angle) * this.speed;
-                this.vy = Math.sin(this.angle) * this.speed;
-                this.gravity = 0.12; // 重力感
-                this.resistance = 0.96; // 空气阻力
-                this.alpha = 1;
-                this.decay = 0.01 + Math.random() * 0.005; // 快衰减，节奏紧凑
-                this.trail = []; // 粒子拖影
-                this.trailMax = 3;
-            }
-
-            update() {
-                // 物理运动（快节奏）
-                this.vy += this.gravity;
-                this.vx *= this.resistance;
-                this.vy *= this.resistance;
-                this.x += this.vx;
-                this.y += this.vy;
-                
-                // 记录拖影
-                this.trail.push({x: this.x, y: this.y, alpha: this.alpha});
-                if (this.trail.length > this.trailMax) this.trail.shift();
-                
-                // 衰减
-                this.alpha -= this.decay;
-                return this.alpha > 0;
-            }
-
-            draw() {
-                // 绘制粒子拖影（模拟运动轨迹）
-                this.trail.forEach((p, i) => {
-                    const trailAlpha = p.alpha * (i / this.trailMax);
-                    ctx.beginPath();
-                    ctx.moveTo(p.x, p.y);
-                    ctx.lineTo(this.x, this.y);
-                    ctx.lineWidth = 1.5;
-                    ctx.strokeStyle = this.color.replace('1)', `${trailAlpha})`);
-                    ctx.stroke();
-                });
-                // 绘制粒子本体
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, 1.2, 0, Math.PI * 2);
-                ctx.fillStyle = this.color.replace('1)', `${this.alpha})`);
-                ctx.fill();
-            }
-        }
-
-        let fireworks = [];
-        let particles = [];
-
-        // 生成爆炸粒子
-        function createParticles(x, y, color) {
-            const count = 200 + Math.random() * 100; // 粒子密集，更逼真
-            for (let i = 0; i < count; i++) {
-                particles.push(new Particle(x, y, color));
-            }
-        }
-
-        // 动画循环（快节奏）
-        function animate() {
-            // 清屏（半透明，保留轻微拖影）
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            // 生成新烟花（频率提高，更喜庆）
-            if (Math.random() < 0.12) {
-                fireworks.push(new Firework());
-            }
-
-            // 更新/绘制烟花
-            for (let i = fireworks.length - 1; i >= 0; i--) {
-                const f = fireworks[i];
-                if (!f.alive) {
-                    fireworks.splice(i, 1);
-                } else {
-                    f.update();
-                    f.draw();
-                }
-            }
-
-            // 更新/绘制粒子
-            for (let i = particles.length - 1; i >= 0; i--) {
-                const p = particles[i];
-                if (!p.update()) {
-                    particles.splice(i, 1);
-                } else {
-                    p.draw();
-                }
-            }
-
-            requestAnimationFrame(animate);
-        }
-
-        // 点击触发烟花
-        canvas.addEventListener('click', (e) => {
-            createParticles(e.clientX, e.clientY, COLORS[Math.floor(Math.random() * COLORS.length)]);
         });
-
-        animate();
+        
+        
+        // 添加一些交互效果
+        document.querySelectorAll('.btn').forEach(button => {
+            button.addEventListener('mousedown', function() {
+                this.style.transform = 'translateY(1px)';
+            });
+            
+            button.addEventListener('mouseup', function() {
+                this.style.transform = '';
+            });
+            
+            button.addEventListener('mouseleave', function() {
+                this.style.transform = '';
+            });
+        });
+        
+        // 页面加载动画
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s ease';
+            
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
     </script>
 </body>
 </html>
